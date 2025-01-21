@@ -8,8 +8,13 @@ const app = (0, express_1.default)();
 // parsers
 app.use(express_1.default.json());
 app.use(express_1.default.text());
+// middleware
+const logger = (req, res, next) => {
+    console.log({ url: req.url, method: req.method, hostname: req.hostname });
+    next();
+};
 // get
-app.get("/", (req, res) => {
+app.get("/", logger, (req, res) => {
     res.send("Hello world!");
 });
 // post
