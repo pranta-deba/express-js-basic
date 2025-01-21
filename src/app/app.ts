@@ -6,10 +6,6 @@ const app = express();
 app.use(express.json());
 app.use(express.text());
 
-
-
-
-
 // router
 const userRouter = express.Router();
 const courseRouter = express.Router();
@@ -36,14 +32,6 @@ courseRouter.post("/create-course", (req: Request, res: Response) => {
     data: course,
   });
 });
-
-
-
-
-
-
-
-
 
 // middleware
 const logger = (req: Request, res: Response, next: NextFunction) => {
@@ -92,6 +80,44 @@ app.get("/query", (req, res) => {
     message:
       "query get successfully, and your query email is : " + req.query.email,
   });
+});
+
+
+
+
+
+
+// error handle
+app.get("/error", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.send(something);
+  } catch (error) {
+    // res.status(400).json({
+    //   success: false,
+    //   message: "failed to get data",
+    // });
+    next(error); // call and pass error in global 
+  }
+});
+
+
+// route not found
+app.all("*", (req:Request, res: Response)=> {
+  res.status(400).json({
+    success: false,
+    message: 'Route is not found'
+  })
+})
+
+// global error handle
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+  console.log(error)
+  if (error) {
+    res.status(400).json({
+      success: false,
+      message: "Something went wrong!",
+    });
+  }
 });
 
 export default app;

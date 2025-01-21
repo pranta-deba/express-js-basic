@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -71,5 +80,35 @@ app.get("/query", (req, res) => {
     res.json({
         message: "query get successfully, and your query email is : " + req.query.email,
     });
+});
+// error handle
+app.get("/error", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.send(something);
+    }
+    catch (error) {
+        // res.status(400).json({
+        //   success: false,
+        //   message: "failed to get data",
+        // });
+        next(error); // call and pass error in global 
+    }
+}));
+// route not found
+app.all("*", (req, res) => {
+    res.status(400).json({
+        success: false,
+        message: 'Route is not found'
+    });
+});
+// global error handle
+app.use((error, req, res, next) => {
+    console.log(error);
+    if (error) {
+        res.status(400).json({
+            success: false,
+            message: "Something went wrong!",
+        });
+    }
 });
 exports.default = app;
