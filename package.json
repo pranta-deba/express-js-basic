@@ -1,8 +1,10 @@
 {
   "name": "express-js-basic",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start:dev": "nodemon dist/server.js",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,6 +16,7 @@
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.7",
+    "nodemon": "^3.1.9",
     "typescript": "^5.7.3"
   }
 }
